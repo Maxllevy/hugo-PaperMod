@@ -7,9 +7,13 @@
 {{- if not .IsHome | and .Title }}
 <header class="page-header">
   {{- partial "breadcrumbs.html" . }}
-  {{- $displayName := index (last 1 (split .Path "/")) 0 | replaceRE "_" " " | title -}}
   <h1>
-    {{ $displayName }}
+    {{- if (or (eq .Kind "term") (eq .Kind "section")) }}
+      {{- $displayName := index (last 1 (split .Path "/")) 0 | replaceRE "_" " " | title -}}
+      {{ $displayName }}
+    {{- else }}
+      {{ .Title }}
+    {{- end }}
     {{- if and (or (eq .Kind `term`) (eq .Kind `section`)) (.Param "ShowRssButtonInSectionTermList") }}
     {{- with .OutputFormats.Get "rss" }}
     <a href="{{ .RelPermalink }}" title="RSS" aria-label="RSS">
